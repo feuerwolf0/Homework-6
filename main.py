@@ -165,18 +165,19 @@ mentor2 = Mentor('Григорий','Горин')
 # Добавляю студентов на курсы
 courses1 = ['Python', 'Csharp','HTML CSS JS']
 courses2 = ['English', 'Deutsch']
-student1.courses_in_progress = courses1
-student1.finished_courses = courses2
-student2.courses_in_progress = courses1
-student2.finished_courses = courses2
+student1.courses_in_progress = courses1.copy()
+student1.finished_courses = courses2.copy()
+student2.courses_in_progress = courses1.copy()
+student2.finished_courses = courses2.copy()
 
 # Добавляю лекторов и ревьюверов на курсы
-lecturer1.courses_attached = courses1.copy()
+lecturer1.courses_attached += courses1.copy()
 lecturer1.courses_attached += courses2.copy()
-lecturer2.courses_attached = courses1.copy()
+lecturer2.courses_attached += courses1.copy()
 lecturer2.courses_attached += courses2.copy()
-reviewer1.courses_attached = courses1.copy()
-reviewer2.courses_attached = courses2.copy()
+
+reviewer1.courses_attached += courses1.copy()
+reviewer2.courses_attached += courses2.copy()
 # Выставляю оценки студентам ревьюверами
 reviewer1.rate_hw(student1,'Python',8)
 reviewer1.rate_hw(student1,'Csharp',7)
