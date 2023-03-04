@@ -124,66 +124,112 @@ class Reviewer(Mentor):
     def __str__(self):
         return f'Имя: {self.name} \nФамилия: {self.surname}'
 
+# Функция для подсчета средней оценки за домашние задания по всем студентам в рамках конкретного курса
+def get_ave(objs,course_name):
+    average = 0
+    for obj in objs:
+        s = 0
+        l = 0
+        for grade in obj.grades[course_name]:
+            s += grade
+            l += 1
+        average += round(s/l,1)
+    return round(average/len(objs),1)
+
+# Функция получения всех entity (объектов) нужного класса посредством globals()
+def get_all_entity(class_name):
+    gl = globals().copy()
+    all_entity = []
+    for i in gl.values():
+        if isinstance(i, class_name):
+            all_entity.append(i)
+    return all_entity
+
 #Тест
-# Создаю обьект класса Лектор
-lector1 = Lecturer('Олег', 'Алексеев')
-# Добавляю объекту лектора закрепленный за ним курс
-lector1.courses_attached.append('Just course')
-# Создаю обьект класса Студент
-student1 = Student('Kirill','Poletaev','male')
-# Добавляю студенту курс Just course в "курсы в процессе"
-student1.courses_in_progress.append('Just course')
-# Выставляю обектом студента оценку объекту лектора
-student1.rate_lecturer(lector1,'Just course',9)
-# Проверяю атрибуты объекта лектора
-# print(lector1.__dict__)
+# Задание 4
+# Создаю объекты студента 1 и студента 2
+student1 = Student('Кирилл','Полетаев','Мужчина')
+student2 = Student('Иван','Ракитин','Мужчина')
+# Создаю объекты лектора 1 и лектора 2
+lecturer1 = Lecturer('Игорь', 'Алексеев')
+lecturer2 = Lecturer('Дмитрий', 'Бочаров')
+# Создаю объект ревьювера 1
+reviewer1 = Reviewer('Егор','Налимов')
+reviewer2 = Reviewer('Дарья','Котова')
+# Создаю обхекты ментора 1 и ментора 2
+mentor1 = Mentor('Алиса','Мышкина')
+mentor2 = Mentor('Григорий','Горин')
+# Добавляю студентов на курсы
+courses1 = ['Python', 'Csharp','HTML CSS JS']
+courses2 = ['English', 'Deutsch']
+student1.courses_in_progress = courses1
+student1.finished_courses = courses2
+student2.courses_in_progress = courses1
+student2.finished_courses = courses2
 
-print('-' * 5 +'Принт ревьювера' + '-' * 5)
-# Создаю объект ревьювера
-reviewer1 = Reviewer('Владислав', 'Попов')
-# Печатаю объект ревьювера
-print(reviewer1)
+# Добавляю лекторов и ревьюверов на курсы
+lecturer1.courses_attached = courses1.copy()
+lecturer1.courses_attached += courses2.copy()
+lecturer2.courses_attached = courses1.copy()
+lecturer2.courses_attached += courses2.copy()
+reviewer1.courses_attached = courses1.copy()
+reviewer2.courses_attached = courses2.copy()
+# Выставляю оценки студентам ревьюверами
+reviewer1.rate_hw(student1,'Python',8)
+reviewer1.rate_hw(student1,'Csharp',7)
+reviewer1.rate_hw(student1,'Python',10)
+reviewer1.rate_hw(student1,'HTML CSS JS',3)
+reviewer1.rate_hw(student2,'Python',3)
+reviewer1.rate_hw(student2,'HTML CSS JS',6)
 
-# Тест задание 3.
+reviewer2.rate_hw(student1,'English',1)
+reviewer2.rate_hw(student1,'Deutsch',1)
+reviewer1.rate_hw(student1,'Csharp',2)
+reviewer1.rate_hw(student2,'Csharp',5)
 
-print('-' * 5 +'Принт Лектора 1' + '-' * 5)
+# Выставляю оценки лекторам студентами
+student1.rate_lecturer(lecturer1,'Python', 10)
+student1.rate_lecturer(lecturer2,'Python', 7)
+student1.rate_lecturer(lecturer1,'Csharp', 3)
+student1.rate_lecturer(lecturer1,'HTML CSS JS', 7)
+student1.rate_lecturer(lecturer2,'English', 8)
+student1.rate_lecturer(lecturer2,'Deutsch', 10)
 
-# Добавляю объекту лектор 2 курса и оценки к нему
-lector1.grades['First course'] = [3,8,7]
-lector1.grades['Second course'] = [5,10,8]
-# Печатаю объект лектора
-print(lector1)
+student2.rate_lecturer(lecturer1,'Python', 6)
+student2.rate_lecturer(lecturer2,'Python', 5)
+student2.rate_lecturer(lecturer1,'Csharp', 2)
+student2.rate_lecturer(lecturer1,'HTML CSS JS', 1)
+student2.rate_lecturer(lecturer2,'English', 7)
+student2.rate_lecturer(lecturer2,'Deutsch', 3)
 
-print('-' * 5 +'Принт студента 1' + '-' * 5)
-
-# Добавляю обьекту студента завершенные курсы и оценки к ним
-student1.finished_courses.append('First course')
-student1.finished_courses.append('Second course')
-student1.grades['First course'] = [5,7,9]
-student1.grades['Second course'] = [10,10,3,1]
-student1.grades['Just Course'] = [8]
-# Печатаю объект студента
+print('---Студент 1---')
 print(student1)
-
-print('-' * 5 +'Принт Студента 2' + '-' * 5)
-# Добавляю второго студента для сравнения
-student2 = Student('Иван', 'Нечаев', 'male')
-student2.finished_courses.append('First course')
-student2.grades['First course'] = [1,10,8,7,6,4]
+print('---Студент 2---')
 print(student2)
-print('-' * 5 +'Сравнение оценок студентов' + '-' * 5)
+print('---Лектор 1---')
+print(lecturer1)
+print('---Лектор 2---')
+print(lecturer2)
+print('---Ревьювер 1---')
+print(reviewer1)
+print('---Ревьювер 2---')
+print(reviewer2)
+print('---Сравнение оценок студентов---')
+print(student1 < student2)
+print('---Сравнение оценок лекторов---')
+print(lecturer1 < lecturer2)
 
-# Сравниваю оценки двух студентов
-print(f'{student1 > student2}')
-print('-' * 5 +'Принт лектора 2' + '-' * 5)
+# Тест с выставленным большим кол-вом оценок у студентов и лекторов
+# student1.grades['Python'] += [9,8,3,5,7,8,3,9,9,9,9]
+# student2.grades['Python'] += [2,5,6,8,4,5,3]
+# lecturer1.grades['Python'] += [2,8,3,3,3,3,3]
+# lecturer2.grades['Python'] += [8,8,3,8,4,8,9,0,0]
 
-# Добавляю второго лектора
-lector2 = Lecturer('Евгений', 'Рясин')
-lector2.courses_attached.append('Just course')
-lector2.grades['First course'] = [3,2,3]
-lector2.grades['Second course'] = [1,10,8,9]
-print(lector2)
 
-print('-' * 5 +'Сравнение оценок лекторов' + '-' * 5)
-# Сравниваю двух лекторов
-print(lector1 < lector2)
+# Получить среднюю оценку за домашние задания по всем студентам в рамках конкретного курса
+print('---Средняя оценка студентов на курсе Python---')
+print(f"Средняя оценка по всем студентам на курсе Python: {get_ave(get_all_entity(Student), 'Python')}")
+
+# Получить среднюю оценки за лекции всех лекторов в рамках курса
+print('---Средняя оценка лекторов на курсе Python---')
+print(f"Средняя оценка по всем лекторам на курсе Python: {get_ave(get_all_entity(Lecturer), 'Python')}")
