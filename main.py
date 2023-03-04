@@ -136,7 +136,7 @@ def get_ave(objs,course_name):
                 l += 1
             average += round(s/l,1)
         else: 
-            return 0
+            average += 0
     return round(average/len(objs),1)
 
 # Функция получения всех entity (объектов) нужного класса посредством globals()
